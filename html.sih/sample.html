@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kraत्रिम - Prosthetic Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .phone-container {
+            transform: scale(0.9);
+            transform-origin: top center;
+        }
+        @media (min-width: 640px) {
+            .phone-container {
+                transform: scale(1);
+            }
+        }
+
+        /* Custom scrollbar for device list */
+        .device-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .device-list::-webkit-scrollbar-track {
+            background: #2d3748; /* gray-800 */
+        }
+        .device-list::-webkit-scrollbar-thumb {
+            background: #4a5568; /* gray-600 */
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center min-h-screen p-4 overflow-hidden">
+
+    <!-- Phone Mockup -->
+    <div class="phone-container">
+        <div class="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[700px] w-[350px] shadow-xl">
+            <div class="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
+            <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+            <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
+            <div class="h-[64px] w-[3px] bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+            <div class="rounded-[2rem] overflow-hidden w-full h-full bg-[#111827]">
+                
+                <!-- App Screen Content -->
+                <div id="app-screen" class="w-full h-full text-white">
+
+                    <!-- Screen: Welcome -->
+                    <div id="welcome-screen" class="h-full flex flex-col justify-between items-center p-8 bg-[#1F2937]">
+                        <div class="flex-grow flex flex-col justify-center items-center text-center">
+                            <div class="bg-[#3B82F6] w-24 h-24 rounded-full flex items-center justify-center mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0 0V6m0 5.5v2.5m0 0V19m0-2.5a2.5 2.5 0 115 0m-5 0a2.5 2.5 0 10-5 0" />
+                                </svg>
+                            </div>
+                            <h1 class="text-4xl font-bold">Kraत्रिम</h1>
+                            <p class="text-gray-400 mt-2">Unlocking Your Potential</p>
+                        </div>
+                        <div class="w-full">
+                            <button onclick="showScreen('login-screen')" class="w-full bg-[#3B82F6] text-white py-3 rounded-lg font-semibold mb-3 transition-transform active:scale-95">Login</button>
+                            <button onclick="showScreen('login-screen')" class="w-full bg-[#10B981] text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Sign Up</button>
+                            <p class="text-xs text-gray-500 text-center mt-4">Terms of Service & Privacy Policy</p>
+                        </div>
+                    </div>
+
+                    <!-- Screen: Login -->
+                    <div id="login-screen" class="hidden h-full flex flex-col p-6 bg-[#1F2937]">
+                         <button onclick="showScreen('welcome-screen')" class="absolute top-4 left-4 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <div class="flex-grow flex flex-col justify-center">
+                            <div class="text-center mb-10">
+                                <div class="bg-[#3B82F6] w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 S0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0 0V6m0 5.5v2.5m0 0V19m0-2.5a2.5 2.5 0 115 0m-5 0a2.5 2.5 0 10-5 0" />
+                                    </svg>
+                                </div>
+                                <h2 class="text-2xl font-bold">Welcome Back</h2>
+                                <p class="text-gray-400">Log in to your account.</p>
+                            </div>
+                            <form onsubmit="event.preventDefault(); login();">
+                                <div class="mb-4">
+                                    <label class="text-sm text-gray-400">Email</label>
+                                    <input type="email" value="user@kratrim.com" class="w-full bg-gray-700 p-3 rounded-lg mt-1 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div class="mb-6">
+                                    <label class="text-sm text-gray-400">Password</label>
+                                    <input type="password" value="password" class="w-full bg-gray-700 p-3 rounded-lg mt-1 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <p class="text-right text-sm text-blue-400 mb-6 cursor-pointer">Forgot Password?</p>
+                                <button type="submit" class="w-full bg-[#3B82F6] text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Login</button>
+                            </form>
+                             <div class="my-4 flex items-center">
+                                <div class="flex-grow border-t border-gray-600"></div>
+                                <span class="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
+                                <div class="flex-grow border-t border-gray-600"></div>
+                            </div>
+                            <button onclick="login()" class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Demo Login</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen: Home -->
+                    <div id="home-screen" class="hidden h-full flex flex-col p-4 bg-[#111827]">
+                        <header class="flex justify-between items-center p-2 mb-4">
+                             <div class="bg-blue-500 p-2 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            </div>
+                            <h2 class="text-lg font-semibold">Welcome, User!</h2>
+                            <div class="flex items-center space-x-3">
+                                <div class="relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                      <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    </span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            </div>
+                        </header>
+                        <main class="space-y-4 px-2 flex-grow overflow-y-auto device-list">
+                            <div class="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-blue-500/20 p-2 rounded-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Add a New Device</h3>
+                                            <p class="text-xs text-gray-400">Connect and set up your device.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="showScreen('add-device-screen'); simulateScan();" class="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-transform active:scale-95">Add</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-yellow-500/20 p-2 rounded-lg">
+                                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Maintenance Mode</h3>
+                                            <p class="text-xs text-gray-400">Run diagnostics and updates.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="showScreen('maintenance-screen')" class="bg-yellow-500 text-black px-5 py-2 rounded-lg text-sm font-semibold transition-transform active:scale-95">Start</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-green-500/20 p-2 rounded-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Quick Start</h3>
+                                            <p class="text-xs text-gray-400">Get a tutorial on using your device.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="showScreen('quick-start-screen')" class="bg-green-500 text-black px-5 py-2 rounded-lg text-sm font-semibold transition-transform active:scale-95">View</button>
+                            </div>
+                             <div class="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-purple-500/20 p-2 rounded-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Order a Spare Part</h3>
+                                            <p class="text-xs text-gray-400">Find and order spare parts.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="showScreen('order-pharts-screen')" class="bg-purple-500 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-transform active:scale-95">Order</button>
+                            </div>
+                        </main>
+                        <footer class="text-center p-2">
+                             <button onclick="showScreen('login-screen')" class="text-sm text-gray-500">Log Out</button>
+                        </footer>
+                    </div>
+
+                    <!-- Screen: Add Device -->
+                    <div id="add-device-screen" class="hidden h-full flex flex-col p-6 bg-[#1F2937]">
+                        <header class="flex items-center mb-6">
+                            <button onclick="showScreen('home-screen')" class="text-gray-400 mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <h2 class="text-xl font-bold">Connect to Device</h2>
+                        </header>
+                        <div id="scan-animation" class="mb-4">
+                            <p class="text-sm text-gray-400 mb-2">Scanning for devices...</p>
+                            <div class="w-full bg-gray-600 rounded-full h-1.5">
+                                <div class="bg-blue-500 h-1.5 rounded-full animate-pulse w-full"></div>
+                            </div>
+                        </div>
+                        <div id="device-list-container" class="hidden flex-grow space-y-3 overflow-y-auto device-list pr-2">
+                            <!-- Device items will be injected here by JS -->
+                        </div>
+                        <div class="mt-auto pt-4">
+                           <button onclick="simulateScan()" class="w-full bg-[#3B82F6] text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Scan for Devices</button>
+                        </div>
+                    </div>
+
+                    <!-- Screen: Prosthetic Control -->
+                    <div id="control-screen" class="hidden h-full flex flex-col bg-[#1F2937]">
+                         <header class="flex items-center p-4">
+                            <button onclick="showScreen('add-device-screen'); simulateScan()" class="text-gray-400 mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <h2 class="text-xl font-bold">Prosthetic Control</h2>
+                        </header>
+                        <div class="flex-grow flex items-center justify-center">
+                            <!-- Hand Images -->
+                            <div id="hand-visual" class="w-48 h-48 relative">
+                                <img id="hand-open" src="images/hand-open.png.png" alt="Open Hand" class="w-full h-full absolute object-contain">
+                                <img id="hand-fist" src="images/hand-fist.png.png" alt="Closed Hand" class="w-full h-full absolute object-contain hidden">
+                                <img id="hand-hold" src="images/hand-hold.png.png" alt="Holding Hand" class="w-full h-full absolute object-contain hidden">
+                            </div>
+                        </div>
+                        <div class="p-6 bg-gray-800/50 rounded-t-3xl">
+                             <div class="grid grid-cols-2 gap-4 mb-4">
+                                <button onclick="setHandState('open')" class="bg-blue-600 text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Open Hand</button>
+                                <button onclick="setHandState('fist')" class="bg-blue-600 text-white py-3 rounded-lg font-semibold transition-transform active:scale-95">Close Hand</button>
+                                <button onclick="setHandState('hold')" class="bg-blue-600 text-white py-3 rounded-lg font-semibold col-span-2 transition-transform active:scale-95">Hold</button>
+                            </div>
+                            <div class="bg-gray-700/50 p-3 rounded-lg flex justify-between items-center mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                                    <span class="font-semibold">Bike Driving Mode</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" value="" class="sr-only peer">
+                                  <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            <div class="text-sm">
+                                <p class="mb-1 text-gray-400">Battery</p>
+                                <div class="w-full bg-gray-600 rounded-full h-2.5">
+                                  <div class="bg-green-500 h-2.5 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Screen: Maintenance -->
+                    <div id="maintenance-screen" class="hidden h-full flex flex-col p-6 bg-[#1F2937]">
+                        <header class="flex items-center mb-6">
+                            <button onclick="showScreen('home-screen')" class="text-gray-400 mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <h2 class="text-xl font-bold">Maintenance Mode</h2>
+                        </header>
+                        <main class="flex-grow space-y-3 overflow-y-auto device-list pr-2">
+                            <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Servo 1 (Little, Ring, Middle)</p>
+                                    <p class="text-xs text-gray-400">Test motor for 3 fingers</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Servo 2 (Index Finger)</p>
+                                    <p class="text-xs text-gray-400">Test motor for index finger</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Servo 3 (Thumb)</p>
+                                    <p class="text-xs text-gray-400">Test motor for thumb</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Battery Charging</p>
+                                    <p class="text-xs text-gray-400">Check charging circuit</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Push Button</p>
+                                    <p class="text-xs text-gray-400">Verify button functionality</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                             <div class="bg-gray-800 rounded-lg p-3 flex justify-between items-center">
+                                <div>
+                                    <p class="font-semibold">Bluetooth Module</p>
+                                    <p class="text-xs text-gray-400">Check connectivity</p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm">Test</button>
+                            </div>
+                        </main>
+                    </div>
+
+                    <!-- Screen: Quick Start -->
+                    <div id="quick-start-screen" class="hidden h-full flex flex-col bg-[#111827]">
+                        <header class="flex items-center p-6 pb-4">
+                            <button onclick="showScreen('home-screen')" class="text-gray-400 mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <h2 class="text-xl font-bold">Quick Start Guide</h2>
+                        </header>
+                        <main class="flex-grow space-y-4 overflow-y-auto device-list px-6">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <img src="images/video-thumbnail-bluetooth.jpg.png" alt="Video thumbnail" class="w-full h-24 object-cover">
+                                <div class="p-3">
+                                    <h3 class="font-semibold mb-1">How to Connect Bluetooth</h3>
+                                    <p class="text-xs text-gray-400 mb-2">A step-by-step guide to pair your device with the app.</p>
+                                    <button class="bg-blue-600 w-full text-white py-1.5 rounded text-sm">Watch (2:30)</button>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <img src="images/video-thumbnail-battery.jpg.png" alt="Video thumbnail" class="w-full h-24 object-cover">
+                                <div class="p-3">
+                                    <h3 class="font-semibold mb-1">How to Change the Battery</h3>
+                                    <p class="text-xs text-gray-400 mb-2">Learn how to safely replace the battery pack.</p>
+                                    <button class="bg-blue-600 w-full text-white py-1.5 rounded text-sm">Watch (1:45)</button>
+                                </div>
+                            </div>
+                             <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <img src="images/video-thumbnail-grips.jpg.png" alt="Video thumbnail" class="w-full h-24 object-cover">
+                                <div class="p-3">
+                                    <h3 class="font-semibold mb-1">Customizing Grip Patterns</h3>
+                                    <p class="text-xs text-gray-400 mb-2">Explore and set up custom grip modes for your needs.</p>
+                                    <button class="bg-blue-600 w-full text-white py-1.5 rounded text-sm">Watch (4:10)</button>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+
+                    <!-- Screen: Order Spare Parts -->
+                    <div id="order-parts-screen" class="hidden h-full flex flex-col bg-[#111827]">
+                        <header class="flex items-center p-6 pb-4">
+                            <button onclick="showScreen('home-screen')" class="text-gray-400 mr-4">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <h2 class="text-xl font-bold">Order Spare Parts</h2>
+                        </header>
+                        <main class="flex-grow overflow-y-auto device-list px-6 pb-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-thumb.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Thumb Finger</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                 <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-index.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Index Finger</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-middle.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Middle Finger</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-ring.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Ring Finger</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                 <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-little.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Little Finger</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-bluetooth.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Bluetooth Module</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-lilypad.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Arduino LilyPad</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                                 <div class="bg-gray-800 rounded-lg p-2 text-center">
+                                    <img src="images/part-battery.jpg.png" class="rounded-md mb-2 w-full h-16 object-cover">
+                                    <p class="text-sm font-semibold">Battery</p>
+                                    <button class="bg-green-600 text-xs w-full mt-2 py-1 rounded">Add to Cart</button>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const screens = ['welcome-screen', 'login-screen', 'home-screen', 'add-device-screen', 'control-screen', 'maintenance-screen', 'quick-start-screen', 'order-parts-screen'];
+
+        function showScreen(screenId) {
+            screens.forEach(id => {
+                const screenElement = document.getElementById(id);
+                if (id === screenId) {
+                    screenElement.classList.remove('hidden');
+                } else {
+                    screenElement.classList.add('hidden');
+                }
+            });
+        }
+
+        function login() {
+            // This is a dummy function. In a real app, you'd validate.
+            // Using a timeout to simulate a network request.
+            setTimeout(() => {
+                showScreen('home-screen');
+            }, 300);
+        }
+
+        function simulateScan() {
+            const scanAnimation = document.getElementById('scan-animation');
+            const deviceListContainer = document.getElementById('device-list-container');
+            
+            scanAnimation.style.display = 'block';
+            deviceListContainer.classList.add('hidden');
+            deviceListContainer.innerHTML = ''; // Clear previous results
+
+            setTimeout(() => {
+                scanAnimation.style.display = 'none';
+                deviceListContainer.classList.remove('hidden');
+                
+                const devices = [
+                    { name: 'Prosthetic Arm X', status: 'Not Connected', signal: 3 },
+                    { name: 'MyoBand 2', status: 'Connecting...', signal: 2 },
+                    { name: 'HandyPro Max', status: 'Not Connected', signal: 4 }
+                ];
+                
+                devices.forEach(device => {
+                    const signalBars = Array(4).fill(0).map((_, i) => 
+                        `<div class="w-1 h-${i+2} rounded-full ${i < device.signal ? 'bg-blue-400' : 'bg-gray-600'}"></div>`
+                    ).join('');
+
+                    const deviceElement = document.createElement('div');
+                    deviceElement.className = 'bg-gray-800 p-4 rounded-lg flex items-center justify-between cursor-pointer hover:bg-gray-700';
+                    deviceElement.innerHTML = `
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-gray-700 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold">${device.name}</p>
+                                <p class="text-sm text-gray-400" id="status-${device.name.replace(/\s+/g, '')}">${device.status}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-end space-x-1 h-5">${signalBars}</div>
+                    `;
+                    deviceElement.onclick = () => connectToDevice(device.name);
+                    deviceListContainer.appendChild(deviceElement);
+                });
+
+            }, 2000);
+        }
+
+        function connectToDevice(deviceName) {
+            const statusEl = document.getElementById(`status-${deviceName.replace(/\s+/g, '')}`);
+            if (!statusEl) return;
+
+            statusEl.textContent = 'Connecting...';
+            statusEl.classList.remove('text-green-400');
+            statusEl.classList.add('text-yellow-400');
+            
+            setTimeout(() => {
+                statusEl.textContent = 'Connected';
+                statusEl.classList.remove('text-yellow-400');
+                statusEl.classList.add('text-green-400');
+                
+                setTimeout(() => {
+                    showScreen('control-screen');
+                }, 1000);
+
+            }, 1500);
+        }
+
+        function setHandState(state) {
+            const openHand = document.getElementById('hand-open');
+            const fistHand = document.getElementById('hand-fist');
+            const holdHand = document.getElementById('hand-hold');
+
+            // Hide all
+            openHand.classList.add('hidden');
+            fistHand.classList.add('hidden');
+            holdHand.classList.add('hidden');
+
+            // Show selected
+            if (state === 'open') {
+                openHand.classList.remove('hidden');
+            } else if (state === 'fist') {
+                fistHand.classList.remove('hidden');
+            } else if (state === 'hold') {
+                holdHand.classList.remove('hidden');
+            }
+        }
+
+        // Initial state
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('welcome-screen');
+            setHandState('open');
+        });
+
+    </script>
+
+</body>
+</html>
+
